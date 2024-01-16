@@ -1,0 +1,17 @@
+name: Talend Partial CI/CD
+
+on:
+  pull_request:
+  push:
+    paths:
+      - '**.item'
+
+jobs:
+  build:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-diff-ci.yml@main
+    with:
+      TALEND_STUDIO_VERSION: ${{ vars.TALEND_STUDIO_VERSION }}
+      TALEND_CLOUD_WORKSPACE: ${{ vars.TALEND_CLOUD_WORKSPACE }}
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}

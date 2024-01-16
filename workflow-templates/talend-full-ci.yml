@@ -1,0 +1,52 @@
+name: Talend Full CI/CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      buildGoal:
+        description: 'Build Goal'
+        required: true
+        default: 'deploy'
+        type: choice
+        options:
+        - test
+        - install
+        - deploy
+      # partialBuild:
+      #   description: 'Partial Build'
+      #   required: false
+      #   type: boolean
+      cleanCommandline:
+        description: 'Reinstall Commandline'
+        required: false
+        type: boolean
+      attachArtifacts:
+        description: 'Attach Artifacts'
+        required: false
+        default: true
+        type: boolean
+      itemFilter:
+        description: 'Item Filter'
+        required: false
+        default: ''
+        type: string
+      additionalMvnSettings:
+        description: 'Additional Maven Settings'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  build:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-full-ci.yml@main
+    with:
+      buildGoal: ${{ inputs.buildGoal }}
+      TALEND_STUDIO_VERSION: ${{ vars.TALEND_STUDIO_VERSION }}
+      TALEND_CLOUD_WORKSPACE: ${{ vars.TALEND_CLOUD_WORKSPACE }}
+      cleanCommandline:  ${{ inputs.cleanCommandline }}
+      attachArtifacts:  ${{ inputs.attachArtifacts }}
+      itemFilter:  ${{ inputs.itemFilter }}
+      additionalMvnSettings:  ${{ inputs.additionalMvnSettings }}
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
