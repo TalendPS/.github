@@ -3,10 +3,10 @@
   "description": "Building only changed Talend artifacts. Supports reference projects. Optional: Publishing to Talend Cloud.",
   "iconName": "talend-logo.svg",
   "categories": [
-    "continuous-integration",
-    "Java"
+    "continuous-integration"
   ],
   "filePatterns": [
-      ".*\\.item$"
+      ".*\\.item$",
+      ".*talend\\.project$"
   ]
 }

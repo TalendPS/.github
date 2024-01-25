@@ -42,7 +42,11 @@ jobs:
     secrets:
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
-          
+
+  cve-check:
+    needs: build
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cve-scanner.yml@master  
+              
   deploy-to-uat:
     needs: deploy-to-dev
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master

@@ -3,11 +3,10 @@
   "description": "Building full Talend project. Supports reference projects. Publishing to talend cloud. Promotions of artifacts and optional task update in each environment.",
   "iconName": "talend-logo.svg",
   "categories": [
-    "deployment",
-    "continuous-integration",
-    "Java"
+    "deployment"
   ],
   "filePatterns": [
-      ".*\\.item$"
+      ".*\\.item$",
+      ".*talend\\.project$"
   ]
 }
