@@ -1,7 +1,7 @@
 {
   "name": "Talend CI",
   "description": "Building complete Talend projects. Supports reference projects. Optional: Publishing to Talend Cloud.",
-  "iconName": "talend-logo.svg",
+  "iconName": "qlik-logo",
   "categories": [
     "continuous-integration"
   ],
