@@ -1,0 +1,39 @@
+name: Talend CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      CLEAN_COMMANDLINE:
+        description: 'Reinstall Commandline. Purge old installation if any.'
+        required: false
+        type: boolean
+      ADDITIONAL_MVN_ARGS:
+        description: 'Additional Maven Settings'
+        required: false
+        default: ''
+        type: string
+      TALEND_STUDIO_VERSION:
+        description: 'Studio Patch Level'
+        required: false
+        default: latest
+        type: string
+      TALEND_STUDIO_BASE_URL:
+        description: 'URL to get Studio base files'
+        default: https://update.talend.com/Studio/8/base
+        required: false
+        type: string
+      TALEND_STUDIO_UPDATE_URL:
+        description: 'URL to get Studio update files'
+        default: https://update.talend.com/Studio/8/updates'
+        required: false
+        type: string
+
+jobs:
+  build:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-comandline-installer.yml@master
+    with:
+      CLEAN_COMMANDLINE: ${{ inputs.CLEAN_COMMANDLINE }}
+      ADDITIONAL_MVN_ARGS:  ${{ inputs.ADDITIONAL_MVN_ARGS }}
+      TALEND_STUDIO_VERSION:  ${{ inputs.TALEND_STUDIO_VERSION }}
+      TALEND_STUDIO_BASE_URL:  ${{ inputs.TALEND_STUDIO_BASE_URL }}
+      TALEND_STUDIO_UPDATE_URL:  ${{ inputs.TALEND_STUDIO_UPDATE_URL }}

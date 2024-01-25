@@ -1,0 +1,14 @@
+{
+  "name": "Talend Commandline Installer",
+  "description": "Workflow to install a selected version of the Talend commandline and store it in the cache if running on github VM (recommended to be performed on rep default branch)",
+  "iconName": "qlik-logo2",
+  "categories": [
+    "continuous-integration",
+    "dependency-management",
+    "utilities"
+  ],
+  "filePatterns": [
+      ".*\\.item$",
+      ".*talend\\.project$"
+  ]
+}
