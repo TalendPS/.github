@@ -29,7 +29,7 @@ on:
         type: string
 
 jobs:
-  build:
+  install:
     uses: TalendPS/CICD_REF/.github/workflows/talend-comandline-installer.yml@master
     with:
       CLEAN_COMMANDLINE: ${{ inputs.CLEAN_COMMANDLINE }}
