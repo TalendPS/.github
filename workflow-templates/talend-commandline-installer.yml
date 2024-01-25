@@ -37,3 +37,5 @@ jobs:
       TALEND_STUDIO_VERSION:  ${{ inputs.TALEND_STUDIO_VERSION }}
       TALEND_STUDIO_BASE_URL:  ${{ inputs.TALEND_STUDIO_BASE_URL }}
       TALEND_STUDIO_UPDATE_URL:  ${{ inputs.TALEND_STUDIO_UPDATE_URL }}
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
