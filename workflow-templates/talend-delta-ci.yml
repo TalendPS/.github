@@ -1,0 +1,20 @@
+name: Talend Delta CI/CD
+
+on:
+  # pull_request:
+  #   branches:
+  #     - development
+  push:
+    branches:
+      - feature/**
+    paths:
+      - '**.item'
+
+jobs:
+  build:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-delta-ci.yml@master
+    with:
+      BUILD_GOAL: test
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      # TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}

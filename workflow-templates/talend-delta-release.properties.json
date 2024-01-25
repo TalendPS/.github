@@ -1,0 +1,13 @@
+{
+  "name": "Talend Delta Release - CI/CD",
+  "description": "Building only changed Talend artifacts. Supports reference projects. Publishing to talend cloud. Promotions of artifacts and optional task update in each environment.",
+  "iconName": "talend-logo.svg",
+  "categories": [
+    "deployment",
+    "continuous-integration",
+    "Java"
+  ],
+  "filePatterns": [
+      ".*\\.item$"
+  ]
+}

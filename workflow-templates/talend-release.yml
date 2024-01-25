@@ -1,0 +1,64 @@
+name: Talend Full Release
+
+on:
+  release:
+    types:
+      - published
+      
+  workflow_dispatch:
+    inputs:
+      ITEM_FILTER:
+        description: Item Filter
+        required: false
+        type: string
+      VERSION_NUMBER:
+        description: x.y.z formatted version number
+        required: true
+        type: string
+      ADDITIONAL_MVN_ARGS:
+        description: Additional Maven Settings
+        required: false
+        type: string
+
+jobs:
+  build:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-ci.yml@master
+    with:
+      BUILD_GOAL: package
+      ATTACH_ARTIFACTS: true
+      ITEM_FILTER: ${{ inputs.ITEM_FILTER }}
+      ADDITIONAL_MVN_ARGS:  ${{ inputs.ADDITIONAL_MVN_ARGS }}
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+
+  deploy-to-dev:
+    needs: build
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-deployer.yml@master
+    with:
+      ENVIRONMENT: DEV
+      ADDITIONAL_MVN_ARGS: ${{ inputs.ADDITIONAL_MVN_ARGS }}
+      TASK_TAG: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+          
+  deploy-to-uat:
+    needs: deploy-to-dev
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
+    with: 
+      ENVIRONMENT: UAT
+      ARTIFACT_NAME: DEV-deployments
+      TASK_TAG: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
+    secrets:
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+      
+  deploy-to-prod:
+    needs: deploy-to-uat
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
+    with: 
+      ENVIRONMENT: PROD
+      ARTIFACT_NAME: UAT-promotions
+      TASK_TAG: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
+    secrets:
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}

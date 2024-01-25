@@ -1,0 +1,44 @@
+name: Talend Delta Release
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.item'
+
+jobs:
+  build:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-delta-ci.yml@master
+    with:
+      BUILD_GOAL: package
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+
+  deploy-to-dev:
+    needs: build
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-deployer.yml@master
+    with:
+      ENVIRONMENT: DEV
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+          
+  deploy-to-uat:
+    needs: deploy-to-dev
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
+    with: 
+      ENVIRONMENT: UAT
+      ARTIFACT_NAME: DEV-deployments
+    secrets:
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+      
+  deploy-to-prod:
+    needs: deploy-to-uat
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
+    with: 
+      ENVIRONMENT: PROD
+      ARTIFACT_NAME: UAT-promotions
+    secrets:
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
