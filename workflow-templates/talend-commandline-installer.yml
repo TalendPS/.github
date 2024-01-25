@@ -24,7 +24,7 @@ on:
         type: string
       TALEND_STUDIO_UPDATE_URL:
         description: 'URL to get Studio update files'
-        default: https://update.talend.com/Studio/8/updates'
+        default: https://update.talend.com/Studio/8/updates
         required: false
         type: string
 
