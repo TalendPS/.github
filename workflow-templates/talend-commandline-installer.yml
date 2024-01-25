@@ -1,4 +1,4 @@
-name: Talend CI
+name: Talend Commandline Installer
 
 on:
   workflow_dispatch:
