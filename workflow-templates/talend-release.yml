@@ -30,7 +30,6 @@ jobs:
       ADDITIONAL_MVN_ARGS:  ${{ inputs.ADDITIONAL_MVN_ARGS }}
     secrets:
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
 
   deploy-to-dev:
     needs: build
