@@ -55,6 +55,24 @@ jobs:
       TASK_TAG: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+
+  run-on-uat:
+    needs: deploy-to-uat
+    if: needs.deploy-to-uat.outputs.TASK_SUCCESS > 0
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-runner.yml@master
+    with: 
+      ENVIRONMENT: UAT
+    secrets:
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+
+  validate-on-uat:
+    needs: run-on-uat
+    if: needs.run-on-uat.outputs.SUCCESS > 0
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-validator.yml@master
+    with: 
+      ENVIRONMENT: UAT
+    secrets:
+      TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
       
   deploy-to-prod:
     needs: deploy-to-uat
