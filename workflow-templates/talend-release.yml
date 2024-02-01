@@ -21,7 +21,15 @@ on:
         type: string
 
 jobs:
+  setMavenVersion:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-set-mvn-version.yml@master
+    with:
+      VERSION_NUMBER: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+
   build:
+    needs: setMavenVersion
     uses: TalendPS/CICD_REF/.github/workflows/talend-ci.yml@master
     with:
       BUILD_GOAL: package
