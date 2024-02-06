@@ -83,7 +83,10 @@ jobs:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
       
   deploy-to-prod:
-    needs: deploy-to-uat
+    needs:
+      - validate-on-uat
+      - deploy-to-uat
+    if: always() && needs.deploy-to-uat.result == 'success'
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
     with: 
       ENVIRONMENT: PROD
