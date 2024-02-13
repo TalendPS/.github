@@ -79,14 +79,12 @@ jobs:
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-validator.yml@master
     with: 
       ENVIRONMENT: UAT
+      continue-on-error: true
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
       
   deploy-to-prod:
-    needs:
-      - validate-on-uat
-      - deploy-to-uat
-    if: always() && needs.deploy-to-uat.result == 'success'
+    needs: validate-on-uat
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
     with: 
       ENVIRONMENT: PROD

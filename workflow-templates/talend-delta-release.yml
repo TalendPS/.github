@@ -34,6 +34,7 @@ jobs:
     with: 
       ENVIRONMENT: UAT
       ARTIFACT_NAME: DEV-deployments
+      # FAIL_ON_NO_TASKS: true
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
  
@@ -43,6 +44,7 @@ jobs:
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-runner.yml@master
     with: 
       ENVIRONMENT: UAT
+      # FAIL_ON_NO_TASKS: true
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
 
@@ -52,6 +54,7 @@ jobs:
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-validator.yml@master
     with: 
       ENVIRONMENT: UAT
+      # continue-on-error: false
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
            
