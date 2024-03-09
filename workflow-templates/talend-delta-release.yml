@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    uses: TalendPS/CICD_REF/.github/workflows/talend-delta-ci.yml@master
+    uses: TalendPS/CICD_REF/.github/workflows/talend-ci-delta.yml@master
     with:
       BUILD_GOAL: package
     secrets:
