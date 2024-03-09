@@ -1,6 +1,9 @@
 name: Talend Commandline Installer
 
 on:
+  schedule:
+    - cron: '27 5 * * 0' # every sunday at 5.27am
+
   workflow_dispatch:
     inputs:
       CLEAN_COMMANDLINE:
