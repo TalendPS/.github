@@ -4,7 +4,7 @@ on:
   release:
     types:
       - published
-      
+
   workflow_dispatch:
     inputs:
       ITEM_FILTER:
@@ -52,12 +52,12 @@ jobs:
 
   cve-check:
     needs: build
-    uses: TalendPS/CICD_REF/.github/workflows/talend-cve-scanner.yml@master  
-              
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cve-scanner.yml@master
+
   deploy-to-uat:
     needs: deploy-to-dev
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
-    with: 
+    with:
       ENVIRONMENT: UAT
       ARTIFACT_NAME: DEV-deployments
       TASK_TAG: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
@@ -68,7 +68,7 @@ jobs:
     needs: deploy-to-uat
     if: needs.deploy-to-uat.outputs.TASK_SUCCESS > 0
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-runner.yml@master
-    with: 
+    with:
       ENVIRONMENT: UAT
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
@@ -77,18 +77,27 @@ jobs:
     needs: run-on-uat
     if: needs.run-on-uat.outputs.SUCCESS > 0
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-validator.yml@master
-    with: 
+    with:
       ENVIRONMENT: UAT
       continue-on-error: true
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
-      
+
   deploy-to-prod:
     needs: validate-on-uat
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
-    with: 
+    with:
       ENVIRONMENT: PROD
       ARTIFACT_NAME: UAT-promotions
       TASK_TAG: ${{ github.event.release.tag_name || inputs.VERSION_NUMBER }}
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
+
+  # cleanup-uat:
+  #   needs: deploy-to-prod
+  #   uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-disabler.yml@master
+  #   with:
+  #     ENVIRONMENT: UAT
+  #     TASK_TAG: IntegrationTest
+  #   secrets:
+  #     TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}

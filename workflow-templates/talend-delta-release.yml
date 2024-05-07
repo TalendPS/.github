@@ -7,6 +7,10 @@ on:
     paths:
       - '**.item'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   build:
     uses: TalendPS/CICD_REF/.github/workflows/talend-ci-delta.yml@master
@@ -20,31 +24,33 @@ jobs:
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-deployer.yml@master
     with:
       ENVIRONMENT: DEV
+      # TASK_TAG: ${{ vars.TALEND_STUDIO_VERSION }}
     secrets:
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
 
   # cve-check:
   #   needs: build
-  #   uses: TalendPS/CICD_REF/.github/workflows/talend-cve-scanner.yml@master  
+  #   uses: TalendPS/CICD_REF/.github/workflows/talend-cve-scanner.yml@master
 
   deploy-to-uat:
     needs: deploy-to-dev
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
-    with: 
+    with:
       ENVIRONMENT: UAT
       ARTIFACT_NAME: DEV-deployments
-      # FAIL_ON_NO_TASKS: true
+      # TASK_TAG: ${{ vars.TALEND_STUDIO_VERSION }}
+      FAIL_ON_NO_TASKS: false
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
- 
+
   run-on-uat:
     needs: deploy-to-uat
     if: needs.deploy-to-uat.outputs.TASK_SUCCESS > 0
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-runner.yml@master
-    with: 
+    with:
       ENVIRONMENT: UAT
-      # FAIL_ON_NO_TASKS: true
+      FAIL_ON_NO_TASKS: false
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
 
@@ -52,17 +58,18 @@ jobs:
     needs: run-on-uat
     if: needs.run-on-uat.outputs.SUCCESS > 0
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-task-validator.yml@master
-    with: 
+    with:
       ENVIRONMENT: UAT
-      # continue-on-error: false
+      # continue-on-error: true
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
-           
+
   deploy-to-prod:
-    needs: deploy-to-uat
+    needs: validate-on-uat
     uses: TalendPS/CICD_REF/.github/workflows/talend-cloud-promotion.yml@master
-    with: 
+    with:
       ENVIRONMENT: PROD
       ARTIFACT_NAME: UAT-promotions
+      # TASK_TAG: ${{ vars.TALEND_STUDIO_VERSION }}
     secrets:
       TALEND_CLOUD_TOKEN: ${{ secrets.TALEND_CLOUD_TOKEN }}
