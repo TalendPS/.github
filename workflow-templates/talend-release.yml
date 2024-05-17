@@ -53,6 +53,8 @@ jobs:
   cve-check:
     needs: build
     uses: TalendPS/CICD_REF/.github/workflows/talend-cve-scanner.yml@master
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
   deploy-to-uat:
     needs: deploy-to-dev
