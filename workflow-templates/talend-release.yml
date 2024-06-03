@@ -20,6 +20,10 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
 jobs:
   setMavenVersion:
     uses: TalendPS/CICD_REF/.github/workflows/talend-set-mvn-version.yml@master
