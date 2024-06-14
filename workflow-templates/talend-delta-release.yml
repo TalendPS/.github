@@ -12,7 +12,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  code-check:
+    uses: TalendPS/CICD_REF/.github/workflows/talend-cqm-delta-scanner.yml@master
+    secrets:
+      GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+
   build:
+    needs: code-check
     uses: TalendPS/CICD_REF/.github/workflows/talend-ci-delta.yml@master
     with:
       BUILD_GOAL: package
