@@ -26,7 +26,7 @@ concurrency:
 
 jobs:
   code-check:
-    uses: TalendPS/CICD_REF/.github/workflows/talend-cqm-scanner.yml@master
+    uses: TalendPS/CICD_REF/.github/workflows/talend-code-scanner.yml@master
     secrets:
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 

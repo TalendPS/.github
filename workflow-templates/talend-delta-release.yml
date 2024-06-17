@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   code-check:
-    uses: TalendPS/CICD_REF/.github/workflows/talend-cqm-delta-scanner.yml@master
+    uses: TalendPS/CICD_REF/.github/workflows/talend-code-delta-scanner.yml@master
     secrets:
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
