@@ -12,6 +12,7 @@ on:
         type: boolean
       TALEND_STUDIO_VERSION:
         description: 'Studio Patch Level'
+        default: ${{ vars.TALEND_STUDIO_VERSION }}
         required: false
         type: string
       TALEND_STUDIO_BASE_URL:
@@ -30,7 +31,7 @@ jobs:
     uses: TalendPS/CICD_REF/.github/workflows/talend-comandline-installer.yml@master
     with:
       CLEAN_COMMANDLINE: ${{ github.event.schedule && true || inputs.CLEAN_COMMANDLINE }}
-      TALEND_STUDIO_VERSION:  ${{ inputs.TALEND_STUDIO_VERSION || vars.TALEND_STUDIO_VERSION }}
+      TALEND_STUDIO_VERSION:  ${{ inputs.TALEND_STUDIO_VERSION }}
       TALEND_STUDIO_BASE_URL:  ${{ github.event.schedule && (vars.TALEND_STUDIO_BASE_URL || 'https://update.talend.com/Studio/8/base') || inputs.TALEND_STUDIO_BASE_URL }}
       TALEND_STUDIO_UPDATE_URL:  ${{ github.event.schedule && (vars.TALEND_STUDIO_UPDATE_URL || 'https://update.talend.com/Studio/8/updates') || inputs.TALEND_STUDIO_UPDATE_URL }}
     secrets:
